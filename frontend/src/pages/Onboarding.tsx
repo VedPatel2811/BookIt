@@ -2,6 +2,7 @@ import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
 import { Button } from '../components/ui/Button';
 import { GlassPanel } from '../components/ui/GlassPanel';
+import { Link } from 'react-router-dom';
 
 export function Onboarding() {
   return (
@@ -52,14 +53,18 @@ export function Onboarding() {
                 </div>
                 
                 <div className="flex flex-col gap-4">
-                  <Button variant="primary" className="w-full gap-3">
-                    Get Started
-                    <span className="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
-                  </Button>
+                  <Link to="/signup" className="w-full block">
+                    <Button variant="primary" className="w-full gap-3">
+                      Get Started
+                      <span className="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
+                    </Button>
+                  </Link>
                   
-                  <Button variant="glass" className="w-full">
-                    Login
-                  </Button>
+                  <Link to="/login" className="w-full block">
+                    <Button variant="glass" className="w-full">
+                      Login
+                    </Button>
+                  </Link>
                 </div>
                 
                 <div className="pt-4 flex flex-col gap-5">

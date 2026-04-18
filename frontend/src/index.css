@@ -97,6 +97,18 @@
   .hero-gradient {
     background: linear-gradient(180deg, rgba(14, 14, 14, 0.2) 0%, rgba(14, 14, 14, 0.8) 70%, rgba(14, 14, 14, 1) 100%);
   }
+
+  .light-leak {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(115, 255, 227, 0.05) 0%, rgba(14, 14, 14, 0) 70%);
+    z-index: 0;
+  }
+
+  .inner-light {
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  }
 }
 
 .material-symbols-outlined {
