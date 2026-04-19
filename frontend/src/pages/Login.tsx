@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../lib/AuthContext';
 import { fetchAPI } from '../lib/api';
+import { useAppDispatch } from '../hooks/redux';
+import { loginSuccess } from '../store/slices/authSlice';
 
 export function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { loginUser } = useAuth();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -30,8 +31,16 @@ export function Login() {
         body: formData.toString(),
       });
 
-      await loginUser(response.access_token);
-      navigate('/');
+      // After successful token fetch, we can optionally fetch user profile
+      // But for now, we just dispatch the token and a dummy user based on email.
+      const user = {
+        id: '1',
+        name: email.split('@')[0] || 'User',
+        email: email,
+      };
+
+      dispatch(loginSuccess({ user, token: response.access_token }));
+      navigate('/dashboard');
     } catch (err: any) {
       setError(err.message || 'Failed to login');
     } finally {

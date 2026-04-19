@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../lib/AuthContext';
 import { fetchAPI } from '../lib/api';
+import { useAppDispatch } from '../hooks/redux';
+import { loginSuccess } from '../store/slices/authSlice';
 
 export function Signup() {
   const [fullName, setFullName] = useState('');
@@ -10,7 +11,7 @@ export function Signup() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { loginUser } = useAuth();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -48,8 +49,14 @@ export function Signup() {
         body: formData.toString(),
       });
 
-      await loginUser(loginResponse.access_token);
-      navigate('/');
+      const user = {
+        id: '1',
+        name: fullName || payloadEmail.split('@')[0],
+        email: payloadEmail,
+      };
+
+      dispatch(loginSuccess({ user, token: loginResponse.access_token }));
+      navigate('/dashboard');
     } catch (err: any) {
       setError(err.message || 'Failed to create account');
     } finally {
@@ -62,7 +69,7 @@ export function Signup() {
       {/* Top Navigation Bar */}
       <header className="bg-transparent backdrop-blur-xl fixed top-0 w-full z-50 flex justify-between items-center px-6 py-4">
         <Link to="/" className="text-2xl font-black tracking-tighter text-[#73ffe3] drop-shadow-[0_0_10px_rgba(115,255,227,0.4)] font-headline">
-          The Estate
+          BookIt
         </Link>
         <div className="hidden md:flex gap-8 items-center">
           <span className="material-symbols-outlined text-white/60 hover:text-[#73ffe3] transition-colors cursor-pointer">help_outline</span>
@@ -102,7 +109,7 @@ export function Signup() {
                 </div>
               </div>
               <p className="text-sm text-on-surface-variant">
-                <span className="text-on-surface font-bold">5,000+</span> homeowners already <br/>enjoying The Estate.
+                <span className="text-on-surface font-bold">5,000+</span> homeowners already <br/>enjoying BookIt.
               </p>
             </div>
           </div>
@@ -158,6 +165,22 @@ export function Signup() {
                   </div>
                 </div>
 
+                {/* Password */}
+                <div className="space-y-1.5">
+                  <label className="text-xs font-label uppercase tracking-widest text-on-surface-variant ml-1">Security Key</label>
+                  <div className="relative group/field">
+                    <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant text-xl">lock</span>
+                    <input 
+                      className="w-full bg-surface-container-highest border-0 focus:ring-0 rounded-xl py-4 pl-12 pr-12 text-on-surface placeholder:text-white/20 transition-all focus:bg-surface-container-highest outline-none" 
+                      placeholder="••••••••••••" 
+                      type="password"
+                      required
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-primary group-focus-within/field:w-full transition-all duration-300 shadow-[0_0_10px_rgba(115,255,227,0.5)]"></div>
+                  </div>
+
                 {/* Property Reference */}
                 <div className="space-y-1.5">
                   <label className="text-xs font-label uppercase tracking-widest text-on-surface-variant ml-1">Flat / Villa Number</label>
@@ -174,21 +197,7 @@ export function Signup() {
                   </div>
                 </div>
 
-                {/* Password */}
-                <div className="space-y-1.5">
-                  <label className="text-xs font-label uppercase tracking-widest text-on-surface-variant ml-1">Security Key</label>
-                  <div className="relative group/field">
-                    <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant text-xl">lock</span>
-                    <input 
-                      className="w-full bg-surface-container-highest border-0 focus:ring-0 rounded-xl py-4 pl-12 pr-12 text-on-surface placeholder:text-white/20 transition-all focus:bg-surface-container-highest outline-none" 
-                      placeholder="••••••••••••" 
-                      type="password"
-                      required
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-primary group-focus-within/field:w-full transition-all duration-300 shadow-[0_0_10px_rgba(115,255,227,0.5)]"></div>
-                  </div>
+                
                 </div>
 
                 {/* Terms */}
@@ -219,17 +228,6 @@ export function Signup() {
                   </p>
                 </div>
               </form>
-            </div>
-
-            {/* Footer Info */}
-            <div className="mt-8 flex justify-between px-2">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-primary-dim"></div>
-                <span className="text-[10px] uppercase tracking-widest text-on-surface-variant font-label">256-bit Encrypted</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] uppercase tracking-widest text-on-surface-variant font-label">ISO 27001 Verified</span>
-              </div>
             </div>
 
           </div>

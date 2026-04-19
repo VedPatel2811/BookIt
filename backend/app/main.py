@@ -8,12 +8,11 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="BookIt API")
 
+import os
+
 # Configure CORS so the frontend can communicate with the backend
-origins = [
-    "http://localhost",
-    "http://localhost:5173", # Vite default port
-    "http://127.0.0.1:5173",
-]
+allowed_origins_str = os.getenv("ALLOWED_ORIGINS", "")
+origins = [origin.strip() for origin in allowed_origins_str.split(",") if origin.strip()]
 
 app.add_middleware(
     CORSMiddleware,
