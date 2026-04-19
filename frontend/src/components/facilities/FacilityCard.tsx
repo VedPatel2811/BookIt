@@ -1,5 +1,6 @@
 import React from 'react';
-import { type Facility } from '../../store/slices/facilitiesSlice';
+import { Link } from 'react-router-dom';
+import type { Facility } from '../../store/slices/facilitiesSlice';
 
 interface FacilityCardProps {
   facility: Facility;
@@ -41,10 +42,10 @@ export const FacilityCard: React.FC<FacilityCardProps> = ({ facility }) => {
             </div>
           </div>
           
-          <button className="px-6 lg:px-8 py-3 lg:py-4 mt-4 lg:mt-0 bg-[#73ffe3] text-[#006152] font-bold rounded-xl active:scale-95 transition-all w-full md:w-auto shadow-[0_0_30px_rgba(115,255,227,0.4)] flex justify-center items-center gap-2 shrink-0">
+          <Link to={`/facilities/${facility.id}`} className="px-6 lg:px-8 py-3 lg:py-4 mt-4 lg:mt-0 bg-[#73ffe3] text-[#006152] font-bold rounded-xl active:scale-95 transition-all w-full md:w-auto shadow-[0_0_30px_rgba(115,255,227,0.4)] flex justify-center items-center gap-2 shrink-0">
             Book Session
             <span className="material-symbols-outlined text-lg">arrow_forward</span>
-          </button>
+          </Link>
         </div>
       </div>
     </div>

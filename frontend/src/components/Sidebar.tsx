@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 // Props are kept for backward compatibility if still passed by DashboardLayout, though we won't use them.
 interface SidebarProps {

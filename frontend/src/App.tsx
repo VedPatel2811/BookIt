@@ -4,6 +4,7 @@ import { Login } from './pages/Login';
 import { Signup } from './pages/Signup';
 import { Dashboard } from './pages/Dashboard';
 import { Facilities } from './pages/Facilities';
+import { FacilityBooking } from './pages/FacilityBooking';
 import { DashboardLayout } from './layouts/DashboardLayout';
 import { ProtectedRoute, PublicRoute } from './components/ProtectedRoute';
 
@@ -24,6 +25,7 @@ function App() {
         </Route>
         <Route path="/facilities" element={<DashboardLayout />}>
           <Route index element={<Facilities />} />
+          <Route path=":id" element={<FacilityBooking />} />
         </Route>
       </Route>
 
