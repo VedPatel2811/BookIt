@@ -7,6 +7,7 @@ import { VisitorPassList } from '../components/dashboard/VisitorPassList';
 import { QuickActionsGrid } from '../components/dashboard/QuickActionsGrid';
 import { TowerUpdatesSidebar } from '../components/dashboard/TowerUpdatesSidebar';
 import { FeaturedAmenity } from '../components/dashboard/FeaturedAmenity';
+import { UserProfileWidget } from '../components/ui/UserProfileWidget';
 
 export const Dashboard: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -40,15 +41,7 @@ export const Dashboard: React.FC = () => {
           <h2 className="text-4xl sm:text-5xl font-headline font-extrabold tracking-tight text-white">Hello, {displayName}</h2>
         </div>
         
-        {/* Desktop elements - Hidden on mobile because they are in the topbar now */}
-        <div className="hidden lg:flex items-center gap-4 lg:self-center">
-          <div className="bg-[#1a1919]/40 backdrop-blur-xl border border-white/5 p-3 rounded-full flex items-center justify-center cursor-pointer hover:bg-[#262626] transition-colors">
-            <span className="material-symbols-outlined text-white">notifications</span>
-          </div>
-          <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-[#73ffe3]/20 cursor-pointer">
-            <img alt="User avatar" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcSmj5ZfksbYtP-atacXBqhndWaNDrU3SGSmkwmbJpfxhwPjHjBZbIFvdaiN4vTi325QpiVVcp5kxgkG6iSHpy-5DqQELjvS9RB_oG5d6LmRxAibFrltdEaliGTfGbUb5h7VjwpOROCPb_98DDlqsjfQe5LVnMP1_W2BFBynsrVbotxs9gnNeL0IKEqjfpD7yKK8Tv-ueYJima39l2nvUzB0_OxuB_L41Q2bl7vz1epKbBI2oElgWE7nwdDko7qcjsFzOf5-M0Pw"/>
-          </div>
-        </div>
+        <UserProfileWidget avatarUrl="https://lh3.googleusercontent.com/aida-public/AB6AXuDcSmj5ZfksbYtP-atacXBqhndWaNDrU3SGSmkwmbJpfxhwPjHjBZbIFvdaiN4vTi325QpiVVcp5kxgkG6iSHpy-5DqQELjvS9RB_oG5d6LmRxAibFrltdEaliGTfGbUb5h7VjwpOROCPb_98DDlqsjfQe5LVnMP1_W2BFBynsrVbotxs9gnNeL0IKEqjfpD7yKK8Tv-ueYJima39l2nvUzB0_OxuB_L41Q2bl7vz1epKbBI2oElgWE7nwdDko7qcjsFzOf5-M0Pw" />
       </header>
 
       {/* Bento Grid Layout */}

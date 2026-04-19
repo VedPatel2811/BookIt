@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 // Props are kept for backward compatibility if still passed by DashboardLayout, though we won't use them.
 interface SidebarProps {
@@ -19,30 +20,30 @@ export const Sidebar: React.FC<SidebarProps> = () => {
         </div>
 
         <nav className="flex-1 flex flex-col gap-1">
-          <a className="bg-gradient-to-r from-[#73ffe3]/10 to-transparent text-[#73ffe3] border-l-4 border-[#73ffe3] py-4 px-6 flex items-center gap-4 transition-all duration-200 hover:translate-x-1 font-headline text-sm font-medium" href="#">
+          <Link to="/dashboard" className={`py-4 px-6 flex items-center gap-4 transition-all duration-200 hover:translate-x-1 font-headline text-sm font-medium ${location.pathname === '/dashboard' ? 'bg-gradient-to-r from-[#73ffe3]/10 to-transparent text-[#73ffe3] border-l-4 border-[#73ffe3]' : 'text-slate-400 hover:text-white hover:bg-white/5 border-l-4 border-transparent'}`}>
             <span className="material-symbols-outlined shrink-0" style={{ fontVariationSettings: "'FILL' 1" }}>dashboard</span>
             <span>Dashboard</span>
-          </a>
-          <a className="text-slate-400 hover:text-white hover:bg-white/5 py-4 px-6 flex items-center gap-4 transition-all duration-200 hover:translate-x-1 font-headline text-sm font-medium" href="#">
+          </Link>
+          <Link to="/facilities" className={`py-4 px-6 flex items-center gap-4 transition-all duration-200 hover:translate-x-1 font-headline text-sm font-medium ${location.pathname === '/facilities' ? 'bg-gradient-to-r from-[#73ffe3]/10 to-transparent text-[#73ffe3] border-l-4 border-[#73ffe3]' : 'text-slate-400 hover:text-white hover:bg-white/5 border-l-4 border-transparent'}`}>
             <span className="material-symbols-outlined shrink-0">sports_cricket</span>
             <span>Facilities</span>
-          </a>
-          <a className="text-slate-400 hover:text-white hover:bg-white/5 py-4 px-6 flex items-center gap-4 transition-all duration-200 hover:translate-x-1 font-headline text-sm font-medium" href="#">
+          </Link>
+          <Link to="#" className="text-slate-400 hover:text-white hover:bg-white/5 py-4 px-6 flex items-center gap-4 transition-all duration-200 hover:translate-x-1 font-headline text-sm font-medium border-l-4 border-transparent">
             <span className="material-symbols-outlined shrink-0">build</span>
             <span>Maintenance</span>
-          </a>
-          <a className="text-slate-400 hover:text-white hover:bg-white/5 py-4 px-6 flex items-center gap-4 transition-all duration-200 hover:translate-x-1 font-headline text-sm font-medium" href="#">
+          </Link>
+          <Link to="#" className="text-slate-400 hover:text-white hover:bg-white/5 py-4 px-6 flex items-center gap-4 transition-all duration-200 hover:translate-x-1 font-headline text-sm font-medium border-l-4 border-transparent">
             <span className="material-symbols-outlined shrink-0">report_problem</span>
             <span>Complaints</span>
-          </a>
-          <a className="text-slate-400 hover:text-white hover:bg-white/5 py-4 px-6 flex items-center gap-4 transition-all duration-200 hover:translate-x-1 font-headline text-sm font-medium" href="#">
+          </Link>
+          <Link to="#" className="text-slate-400 hover:text-white hover:bg-white/5 py-4 px-6 flex items-center gap-4 transition-all duration-200 hover:translate-x-1 font-headline text-sm font-medium border-l-4 border-transparent">
             <span className="material-symbols-outlined shrink-0">person_add</span>
             <span>Visitors</span>
-          </a>
-          <a className="text-slate-400 hover:text-white hover:bg-white/5 py-4 px-6 flex items-center gap-4 transition-all duration-200 hover:translate-x-1 font-headline text-sm font-medium" href="#">
+          </Link>
+          <Link to="#" className="text-slate-400 hover:text-white hover:bg-white/5 py-4 px-6 flex items-center gap-4 transition-all duration-200 hover:translate-x-1 font-headline text-sm font-medium border-l-4 border-transparent">
             <span className="material-symbols-outlined shrink-0">group</span>
             <span>Community</span>
-          </a>
+          </Link>
         </nav>
 
         <div className="px-6 mt-auto">
@@ -54,36 +55,36 @@ export const Sidebar: React.FC<SidebarProps> = () => {
 
       {/* MOBILE & TABLET BOTTOM BAR (Visible only below lg) */}
       <nav className="flex lg:hidden fixed bottom-0 left-0 w-full h-20 sm:h-24 z-[60] bg-[#1a1919]/90 backdrop-blur-3xl border-t border-white/5 px-4 sm:px-12 justify-between items-center shadow-[0_-10px_40px_rgba(0,0,0,0.8)] pb-safe">
-        <a href="#" className="flex flex-col items-center gap-1 text-[#73ffe3] group">
-          <div className="w-12 h-8 rounded-full bg-[#73ffe3]/20 flex items-center justify-center transition-all group-active:scale-95">
-            <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>dashboard</span>
+        <Link to="/dashboard" className={`flex flex-col items-center gap-1 group ${location.pathname === '/dashboard' ? 'text-[#73ffe3]' : 'text-[#adaaaa] hover:text-white'}`}>
+          <div className={`w-12 h-8 rounded-full flex items-center justify-center transition-all group-active:scale-95 ${location.pathname === '/dashboard' ? 'bg-[#73ffe3]/20' : 'group-hover:bg-white/5'}`}>
+             <span className="material-symbols-outlined" style={{ fontVariationSettings: location.pathname === '/dashboard' ? "'FILL' 1" : undefined }}>dashboard</span>
           </div>
           <span className="text-[10px] font-headline font-bold uppercase tracking-widest mt-1">Home</span>
-        </a>
-        <a href="#" className="flex flex-col items-center gap-1 text-[#adaaaa] hover:text-white transition-colors group">
-          <div className="w-12 h-8 rounded-full flex items-center justify-center transition-all group-hover:bg-white/5 group-active:scale-95">
-            <span className="material-symbols-outlined">sports_cricket</span>
+        </Link>
+        <Link to="/facilities" className={`flex flex-col items-center gap-1 group ${location.pathname === '/facilities' ? 'text-[#73ffe3]' : 'text-[#adaaaa] hover:text-white'}`}>
+          <div className={`w-12 h-8 rounded-full flex items-center justify-center transition-all group-active:scale-95 ${location.pathname === '/facilities' ? 'bg-[#73ffe3]/20' : 'group-hover:bg-white/5'}`}>
+            <span className="material-symbols-outlined" style={{ fontVariationSettings: location.pathname === '/facilities' ? "'FILL' 1" : undefined }}>sports_cricket</span>
           </div>
           <span className="text-[10px] font-headline font-medium uppercase tracking-widest mt-1">Play</span>
-        </a>
-        <a href="#" className="flex flex-col items-center gap-1 text-[#adaaaa] hover:text-white transition-colors group">
+        </Link>
+        <Link to="#" className="flex flex-col items-center gap-1 text-[#adaaaa] hover:text-white transition-colors group">
           <div className="w-12 h-8 rounded-full flex items-center justify-center transition-all group-hover:bg-white/5 group-active:scale-95">
             <span className="material-symbols-outlined">build</span>
           </div>
           <span className="text-[10px] font-headline font-medium uppercase tracking-widest mt-1">Fix</span>
-        </a>
-        <a href="#" className="flex flex-col items-center gap-1 text-[#adaaaa] hover:text-white transition-colors group">
+        </Link>
+        <Link to="#" className="flex flex-col items-center gap-1 text-[#adaaaa] hover:text-white transition-colors group">
           <div className="w-12 h-8 rounded-full flex items-center justify-center transition-all group-hover:bg-white/5 group-active:scale-95">
             <span className="material-symbols-outlined">person_add</span>
           </div>
           <span className="text-[10px] font-headline font-medium uppercase tracking-widest mt-1">Guests</span>
-        </a>
-        <a href="#" className="flex flex-col items-center gap-1 text-[#adaaaa] hover:text-white transition-colors group">
+        </Link>
+        <Link to="#" className="flex flex-col items-center gap-1 text-[#adaaaa] hover:text-white transition-colors group">
           <div className="w-12 h-8 rounded-full flex items-center justify-center transition-all group-hover:bg-white/5 group-active:scale-95">
             <span className="material-symbols-outlined">group</span>
           </div>
           <span className="text-[10px] font-headline font-medium uppercase tracking-widest mt-1">Social</span>
-        </a>
+        </Link>
       </nav>
     </>
   );

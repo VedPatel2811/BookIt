@@ -3,6 +3,7 @@ import { Onboarding } from './pages/Onboarding';
 import { Login } from './pages/Login';
 import { Signup } from './pages/Signup';
 import { Dashboard } from './pages/Dashboard';
+import { Facilities } from './pages/Facilities';
 import { DashboardLayout } from './layouts/DashboardLayout';
 import { ProtectedRoute, PublicRoute } from './components/ProtectedRoute';
 
@@ -20,6 +21,9 @@ function App() {
       <Route element={<ProtectedRoute />}>
         <Route path="/dashboard" element={<DashboardLayout />}>
           <Route index element={<Dashboard />} />
+        </Route>
+        <Route path="/facilities" element={<DashboardLayout />}>
+          <Route index element={<Facilities />} />
         </Route>
       </Route>
 
