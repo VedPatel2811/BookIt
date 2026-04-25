@@ -27,3 +27,21 @@ class Transaction(Base):
     date = Column(DateTime(timezone=True), server_default=func.now())
 
     user = relationship("User")
+
+class Complaint(Base):
+    __tablename__ = "complaints"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    subject = Column(String, nullable=False)
+    category = Column(String, nullable=False)
+    urgency = Column(String, nullable=False, default="LOW")
+    description = Column(String, nullable=False)
+    status = Column(String, nullable=False, default="IN_PROGRESS")
+    assigned_to = Column(String, nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    resolved_at = Column(DateTime(timezone=True), nullable=True)
+    admin_comment = Column(String, nullable=True)
+    attachment_url = Column(String, nullable=True)
+
+    user = relationship("User")

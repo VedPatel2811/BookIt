@@ -6,6 +6,7 @@ import { Dashboard } from './pages/Dashboard';
 import { Facilities } from './pages/Facilities';
 import { FacilityBooking } from './pages/FacilityBooking';
 import { Maintenance } from './pages/Maintenance';
+import { Complaints } from './pages/Complaints';
 import { DashboardLayout } from './layouts/DashboardLayout';
 import { ProtectedRoute, PublicRoute } from './components/ProtectedRoute';
 
@@ -30,6 +31,9 @@ function App() {
         </Route>
         <Route path="/maintenance" element={<DashboardLayout />}>
           <Route index element={<Maintenance />} />
+        </Route>
+        <Route path="/complaints" element={<DashboardLayout />}>
+          <Route index element={<Complaints />} />
         </Route>
       </Route>
 
