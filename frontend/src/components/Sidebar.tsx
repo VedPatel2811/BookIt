@@ -28,7 +28,7 @@ export const Sidebar: React.FC<SidebarProps> = () => {
             <span className="material-symbols-outlined shrink-0">sports_cricket</span>
             <span>Facilities</span>
           </Link>
-          <Link to="#" className="text-slate-400 hover:text-white hover:bg-white/5 py-4 px-6 flex items-center gap-4 transition-all duration-200 hover:translate-x-1 font-headline text-sm font-medium border-l-4 border-transparent">
+          <Link to="/maintenance" className={`py-4 px-6 flex items-center gap-4 transition-all duration-200 hover:translate-x-1 font-headline text-sm font-medium ${location.pathname === '/maintenance' ? 'bg-gradient-to-r from-[#73ffe3]/10 to-transparent text-[#73ffe3] border-l-4 border-[#73ffe3]' : 'text-slate-400 hover:text-white hover:bg-white/5 border-l-4 border-transparent'}`}>
             <span className="material-symbols-outlined shrink-0">build</span>
             <span>Maintenance</span>
           </Link>
@@ -67,9 +67,9 @@ export const Sidebar: React.FC<SidebarProps> = () => {
           </div>
           <span className="text-[10px] font-headline font-medium uppercase tracking-widest mt-1">Play</span>
         </Link>
-        <Link to="#" className="flex flex-col items-center gap-1 text-[#adaaaa] hover:text-white transition-colors group">
-          <div className="w-12 h-8 rounded-full flex items-center justify-center transition-all group-hover:bg-white/5 group-active:scale-95">
-            <span className="material-symbols-outlined">build</span>
+        <Link to="/maintenance" className={`flex flex-col items-center gap-1 group ${location.pathname === '/maintenance' ? 'text-[#73ffe3]' : 'text-[#adaaaa] hover:text-white transition-colors'}`}>
+          <div className={`w-12 h-8 rounded-full flex items-center justify-center transition-all group-active:scale-95 ${location.pathname === '/maintenance' ? 'bg-[#73ffe3]/20' : 'group-hover:bg-white/5'}`}>
+            <span className="material-symbols-outlined" style={{ fontVariationSettings: location.pathname === '/maintenance' ? "'FILL' 1" : undefined }}>build</span>
           </div>
           <span className="text-[10px] font-headline font-medium uppercase tracking-widest mt-1">Fix</span>
         </Link>
