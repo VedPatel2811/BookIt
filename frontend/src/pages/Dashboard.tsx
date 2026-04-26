@@ -8,6 +8,7 @@ import { QuickActionsGrid } from '../components/dashboard/QuickActionsGrid';
 import { TowerUpdatesSidebar } from '../components/dashboard/TowerUpdatesSidebar';
 import { FeaturedAmenity } from '../components/dashboard/FeaturedAmenity';
 import { UserProfileWidget } from '../components/ui/UserProfileWidget';
+import { MyBookings } from '../components/dashboard/MyBookings';
 
 export const Dashboard: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -53,6 +54,7 @@ export const Dashboard: React.FC = () => {
       </div>
 
       <FeaturedAmenity />
+      <MyBookings />
     </>
   );
 };

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import engine, Base
-from app.routes import auth, maintenance, complaints, visitors
+from app.routes import auth, maintenance, complaints, visitors, facilities, bookings
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
@@ -27,6 +27,9 @@ app.include_router(auth.router, prefix="/auth", tags=["Authentication"])
 app.include_router(maintenance.router, prefix="/maintenance", tags=["Maintenance"])
 app.include_router(complaints.router)
 app.include_router(visitors.router)
+app.include_router(facilities.router)
+app.include_router(bookings.router)
+
 @app.get("/")
 def read_root():
     return {"message": "Welcome to BookIt Backend API"}

@@ -1,6 +1,6 @@
 from pydantic import BaseModel, EmailStr
-from typing import Optional
-from datetime import datetime
+from typing import Optional, List
+from datetime import datetime, date
 
 class UserBase(BaseModel):
     email: EmailStr
@@ -100,3 +100,60 @@ class VisitorStats(BaseModel):
     expected_today: int
     in_premises: int
     total_monthly: int
+
+# ── Facility ──────────────────────────────────────────────────────────────────
+
+class FacilityResponse(BaseModel):
+    id: int
+    title: str
+    description: str
+    maxTimePerSession: str
+    maxSessionsPerDay: int
+    imageUrl: str
+    badge: Optional[str] = None
+    spanClasses: str
+
+    class Config:
+        from_attributes = True
+
+    @classmethod
+    def from_orm(cls, obj):
+        return cls(
+            id=obj.id,
+            title=obj.title,
+            description=obj.description,
+            maxTimePerSession=obj.max_time_per_session,
+            maxSessionsPerDay=obj.max_sessions_per_day,
+            imageUrl=obj.image_url,
+            badge=obj.badge,
+            spanClasses=obj.span_classes,
+        )
+
+# ── Facility Booking ──────────────────────────────────────────────────────────
+
+class BookingCreate(BaseModel):
+    facility_id: int
+    booking_date: date
+    slot_time: str
+    booker_name: str
+    confirmation_email: EmailStr
+
+class BookingResponse(BaseModel):
+    id: int
+    facility_id: int
+    facility_title: str
+    facility_image_url: str
+    user_id: int
+    booking_date: date
+    slot_time: str
+    booker_name: str
+    confirmation_email: str
+    status: str
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+class SlotStatusResponse(BaseModel):
+    booked: List[str]   # slot_time strings that are confirmed booked
+    locked: List[str]   # slot_time strings currently locked by another user
