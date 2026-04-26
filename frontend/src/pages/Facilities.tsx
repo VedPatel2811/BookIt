@@ -1,16 +1,46 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { fetchFacilities } from '../store/slices/facilitiesSlice';
+import { parseSessionDurationMinutes } from '../utils/dateUtils';
 import { FacilityCard } from '../components/facilities/FacilityCard';
 import { UserProfileWidget } from '../components/ui/UserProfileWidget';
+
+type FilterOption = 'All' | 'Short' | 'Medium' | 'Long';
+
+const FILTERS: { label: string; value: FilterOption }[] = [
+  { label: 'All',          value: 'All'    },
+  { label: '≤ 1 hr',       value: 'Short'  },
+  { label: '1–2 hrs',      value: 'Medium' },
+  { label: '2+ hrs',       value: 'Long'   },
+];
 
 export const Facilities: React.FC = () => {
   const dispatch = useAppDispatch();
   const { facilities, loading, error } = useAppSelector((state) => state.facilities);
 
+  const [query, setQuery]           = useState('');
+  const [filter, setFilter]         = useState<FilterOption>('All');
+
   useEffect(() => {
     dispatch(fetchFacilities());
   }, [dispatch]);
+
+  const filteredFacilities = useMemo(() => {
+    return facilities.filter((f) => {
+      const matchesQuery = query.trim() === '' ||
+        f.title.toLowerCase().includes(query.toLowerCase()) ||
+        f.description.toLowerCase().includes(query.toLowerCase());
+
+      const mins = parseSessionDurationMinutes(f.maxTimePerSession);
+      const matchesFilter =
+        filter === 'All'    ? true :
+        filter === 'Short'  ? mins <= 60 :
+        filter === 'Medium' ? mins > 60 && mins <= 120 :
+        /* Long */             mins > 120;
+
+      return matchesQuery && matchesFilter;
+    });
+  }, [facilities, query, filter]);
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 relative lg:mt-8">
@@ -19,17 +49,28 @@ export const Facilities: React.FC = () => {
         <div className="flex flex-col sm:flex-row gap-4 w-full flex-1">
           <div className="relative w-full lg:max-w-md group">
             <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50 group-focus-within:text-[#73ffe3] transition-colors">search</span>
-            <input className="w-full bg-[#262626]/50 border-none rounded-full py-3 lg:py-2.5 pl-12 pr-6 text-sm focus:ring-0 focus:bg-[#262626] transition-all placeholder:text-[#adaaaa]/40 text-white outline-none" placeholder="Search facilities, amenities..." type="text"/>
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="w-full bg-[#262626]/50 border-none rounded-full py-3 lg:py-2.5 pl-12 pr-6 text-sm focus:ring-0 focus:bg-[#262626] transition-all placeholder:text-[#adaaaa]/40 text-white outline-none"
+              placeholder="Search facilities, amenities..."
+              type="text"
+            />
           </div>
           <div className="flex gap-2 w-full sm:w-auto overflow-x-auto pb-2 sm:pb-0 scrollbar-hide">
-            <button className="px-4 py-2 rounded-full bg-[#1a1919] border border-white/5 text-xs font-semibold text-[#adaaaa] hover:text-[#73ffe3] hover:bg-white/5 transition-all flex items-center gap-2 shrink-0">
-              Availability: Today
-              <span className="material-symbols-outlined text-sm">expand_more</span>
-            </button>
-            <button className="px-4 py-2 rounded-full bg-[#1a1919] border border-white/5 text-xs font-semibold text-[#adaaaa] hover:text-[#73ffe3] hover:bg-white/5 transition-all flex items-center gap-2 shrink-0">
-              Filter: All
-              <span className="material-symbols-outlined text-sm">filter_list</span>
-            </button>
+            {FILTERS.map((f) => (
+              <button
+                key={f.value}
+                onClick={() => setFilter(f.value)}
+                className={`px-4 py-2 rounded-full border text-xs font-semibold transition-all flex items-center gap-2 shrink-0 ${
+                  filter === f.value
+                    ? 'bg-[#73ffe3]/10 border-[#73ffe3] text-[#73ffe3]'
+                    : 'bg-[#1a1919] border-white/5 text-[#adaaaa] hover:text-[#73ffe3] hover:bg-white/5'
+                }`}
+              >
+                {f.label}
+              </button>
+            ))}
           </div>
         </div>
 
@@ -59,12 +100,21 @@ export const Facilities: React.FC = () => {
       )}
 
       {/* Bento Framework */}
-      {!loading && !error && facilities.length > 0 && (
+      {!loading && !error && filteredFacilities.length > 0 && (
          <div className="grid grid-cols-12 gap-6 lg:gap-8">
-            {facilities.map(facility => (
+            {filteredFacilities.map(facility => (
               <FacilityCard key={facility.id} facility={facility} />
             ))}
          </div>
+      )}
+      {!loading && !error && filteredFacilities.length === 0 && facilities.length > 0 && (
+        <div className="flex flex-col items-center justify-center h-[30vh] gap-4 text-center">
+          <span className="material-symbols-outlined text-5xl text-[#adaaaa]/40">search_off</span>
+          <p className="text-[#adaaaa]">No facilities match your search.</p>
+          <button onClick={() => { setQuery(''); setFilter('All'); }} className="text-[#73ffe3] text-sm underline">
+            Clear filters
+          </button>
+        </div>
       )}
     </div>
   );
