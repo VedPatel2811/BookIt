@@ -1,0 +1,79 @@
+version: '3.8'
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Root docker-compose — runs all three services together for local development.
+# Each service (backend/, database/, redis/) can also be deployed independently
+# using its own docker-compose.yml.
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+
+  # ── PostgreSQL ──────────────────────────────────────────────────────────────
+  db:
+    image: postgres:15-alpine
+    container_name: bookit_db
+    restart: unless-stopped
+    env_file:
+      - ./database/.env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-myuser}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-mypassword}
+      POSTGRES_DB: ${POSTGRES_DB:-bookit_db}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - bookit_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-myuser} -d ${POSTGRES_DB:-bookit_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Redis ────────────────────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: bookit_redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - bookit_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── FastAPI Backend ──────────────────────────────────────────────────────────
+  api:
+    build: ./backend
+    container_name: bookit_api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      # Override DATABASE_URL and REDIS_URL to use Docker service names
+      DATABASE_URL: postgresql://myuser:mypassword@db:5432/bookit_db
+      REDIS_URL: redis://redis:6379/0
+    env_file:
+      - ./backend/.env
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - bookit_network
+
+networks:
+  bookit_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
