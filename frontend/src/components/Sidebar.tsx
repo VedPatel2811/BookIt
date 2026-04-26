@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 // Props are kept for backward compatibility if still passed by DashboardLayout, though we won't use them.
 interface SidebarProps {
@@ -8,6 +8,7 @@ interface SidebarProps {
 }
 
 export const Sidebar: React.FC<SidebarProps> = () => {
+  const location = useLocation();
   return (
     <>
       {/* DESKTOP SIDEBAR (Visible only on lg and above) */}
@@ -24,7 +25,7 @@ export const Sidebar: React.FC<SidebarProps> = () => {
             <span className="material-symbols-outlined shrink-0" style={{ fontVariationSettings: "'FILL' 1" }}>dashboard</span>
             <span>Dashboard</span>
           </Link>
-          <Link to="/facilities" className={`py-4 px-6 flex items-center gap-4 transition-all duration-200 hover:translate-x-1 font-headline text-sm font-medium ${location.pathname === '/facilities' ? 'bg-gradient-to-r from-[#73ffe3]/10 to-transparent text-[#73ffe3] border-l-4 border-[#73ffe3]' : 'text-slate-400 hover:text-white hover:bg-white/5 border-l-4 border-transparent'}`}>
+          <Link to="/facilities" className={`py-4 px-6 flex items-center gap-4 transition-all duration-200 hover:translate-x-1 font-headline text-sm font-medium ${location.pathname.startsWith('/facilities') ? 'bg-gradient-to-r from-[#73ffe3]/10 to-transparent text-[#73ffe3] border-l-4 border-[#73ffe3]' : 'text-slate-400 hover:text-white hover:bg-white/5 border-l-4 border-transparent'}`}>
             <span className="material-symbols-outlined shrink-0">sports_cricket</span>
             <span>Facilities</span>
           </Link>
@@ -36,7 +37,7 @@ export const Sidebar: React.FC<SidebarProps> = () => {
             <span className="material-symbols-outlined shrink-0">report_problem</span>
             <span>Complaints</span>
           </Link>
-          <Link to="#" className="text-slate-400 hover:text-white hover:bg-white/5 py-4 px-6 flex items-center gap-4 transition-all duration-200 hover:translate-x-1 font-headline text-sm font-medium border-l-4 border-transparent">
+          <Link to="/visitors" className={`py-4 px-6 flex items-center gap-4 transition-all duration-200 hover:translate-x-1 font-headline text-sm font-medium ${location.pathname === '/visitors' ? 'bg-gradient-to-r from-[#73ffe3]/10 to-transparent text-[#73ffe3] border-l-4 border-[#73ffe3]' : 'text-slate-400 hover:text-white hover:bg-white/5 border-l-4 border-transparent'}`}>
             <span className="material-symbols-outlined shrink-0">person_add</span>
             <span>Visitors</span>
           </Link>
@@ -79,11 +80,11 @@ export const Sidebar: React.FC<SidebarProps> = () => {
           </div>
           <span className="text-[10px] font-headline font-medium uppercase tracking-widest mt-1">Help</span>
         </Link>
-        <Link to="#" className="flex flex-col items-center gap-1 text-[#adaaaa] hover:text-white transition-colors group">
-          <div className="w-12 h-8 rounded-full flex items-center justify-center transition-all group-hover:bg-white/5 group-active:scale-95">
-            <span className="material-symbols-outlined">group</span>
+        <Link to="/visitors" className={`flex flex-col items-center gap-1 group ${location.pathname === '/visitors' ? 'text-[#73ffe3]' : 'text-[#adaaaa] hover:text-white transition-colors'}`}>
+          <div className={`w-12 h-8 rounded-full flex items-center justify-center transition-all group-active:scale-95 ${location.pathname === '/visitors' ? 'bg-[#73ffe3]/20' : 'group-hover:bg-white/5'}`}>
+            <span className="material-symbols-outlined" style={{ fontVariationSettings: location.pathname === '/visitors' ? "'FILL' 1" : undefined }}>person_add</span>
           </div>
-          <span className="text-[10px] font-headline font-medium uppercase tracking-widest mt-1">Social</span>
+          <span className="text-[10px] font-headline font-medium uppercase tracking-widest mt-1">Visitors</span>
         </Link>
       </nav>
     </>

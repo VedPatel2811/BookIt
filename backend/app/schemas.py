@@ -48,6 +48,7 @@ class ComplaintCreate(BaseModel):
     category: str
     urgency: str
     description: str
+    attachment_url: Optional[str] = None
 
 class ComplaintResponse(BaseModel):
     id: int
@@ -71,3 +72,31 @@ class ComplaintStats(BaseModel):
     resident_satisfaction: int
     active_tickets: int
     premium_tier: str
+
+class VisitorCreate(BaseModel):
+    visitor_name: str
+    contact_number: str
+    reason: str
+    expected_start_date: datetime
+    expected_end_date: datetime
+
+class VisitorResponse(BaseModel):
+    id: int
+    user_id: Optional[int] = None
+    visitor_name: str
+    contact_number: str
+    reason: str
+    expected_start_date: datetime
+    expected_end_date: datetime
+    status: str
+    created_at: datetime
+    checked_in_at: Optional[datetime] = None
+    checked_out_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
+
+class VisitorStats(BaseModel):
+    expected_today: int
+    in_premises: int
+    total_monthly: int

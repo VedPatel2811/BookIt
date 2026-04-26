@@ -65,6 +65,27 @@
     background-color: #0e0e0e;
     color: #ffffff;
   }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(115, 255, 227, 0.3);
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(115, 255, 227, 0.6);
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(115, 255, 227, 0.3) rgba(255, 255, 255, 0.02);
+  }
 }
 
 @layer utilities {

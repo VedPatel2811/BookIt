@@ -45,3 +45,20 @@ class Complaint(Base):
     attachment_url = Column(String, nullable=True)
 
     user = relationship("User")
+
+class Visitor(Base):
+    __tablename__ = "visitors"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    visitor_name = Column(String, nullable=False)
+    contact_number = Column(String, nullable=False)
+    reason = Column(String, nullable=False, default="Guest")
+    expected_start_date = Column(DateTime(timezone=True), nullable=False)
+    expected_end_date = Column(DateTime(timezone=True), nullable=False)
+    status = Column(String, nullable=False, default="EXPECTED") # EXPECTED, IN_PREMISES, CHECKED_OUT
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    checked_in_at = Column(DateTime(timezone=True), nullable=True)
+    checked_out_at = Column(DateTime(timezone=True), nullable=True)
+
+    user = relationship("User")

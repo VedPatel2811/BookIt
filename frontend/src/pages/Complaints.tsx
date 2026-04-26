@@ -76,6 +76,17 @@ export const Complaints: React.FC = () => {
   const [urgency, setUrgency] = useState('Low');
   const [description, setDescription] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [attachment, setAttachment] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = error => reject(error);
+    });
+  };
 
   const loadData = async () => {
     try {
@@ -100,13 +111,19 @@ export const Complaints: React.FC = () => {
     setIsSubmitting(true);
     
     try {
+      let attachment_url = null;
+      if (attachment) {
+        attachment_url = await fileToBase64(attachment);
+      }
+
       await fetchAPI('/complaints', {
         method: 'POST',
         body: JSON.stringify({
           subject,
           category,
           urgency,
-          description
+          description,
+          attachment_url
         })
       });
       // Reset form and reload
@@ -114,6 +131,8 @@ export const Complaints: React.FC = () => {
       setDescription('');
       setCategory('Plumbing & Water');
       setUrgency('Low');
+      setAttachment(null);
+      if (fileInputRef.current) fileInputRef.current.value = '';
       await loadData();
     } catch (error) {
       console.error('Failed to submit complaint', error);
@@ -367,9 +386,32 @@ export const Complaints: React.FC = () => {
 
               <div className="space-y-2">
                 <label className="block text-center text-[10px] font-bold uppercase tracking-widest text-[#adaaaa] ml-1">Attachment</label>
-                <div className="border border-dashed border-white/10 rounded-xl p-4 flex items-center justify-center gap-3 hover:bg-white/5 transition-all cursor-pointer group">
-                  <span className="material-symbols-outlined text-[#73ffe3] text-xl">add_a_photo</span>
-                  <p className="text-[10px] font-bold text-[#adaaaa] uppercase">Upload Photo</p>
+                <div 
+                  className="border border-dashed border-white/10 rounded-xl p-4 flex flex-col items-center justify-center gap-3 hover:bg-white/5 transition-all cursor-pointer group"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <input 
+                    type="file" 
+                    ref={fileInputRef} 
+                    className="hidden" 
+                    accept="image/*"
+                    onChange={(e) => {
+                      if (e.target.files && e.target.files[0]) {
+                        setAttachment(e.target.files[0]);
+                      }
+                    }}
+                  />
+                  {attachment ? (
+                    <>
+                      <span className="material-symbols-outlined text-[#73ffe3] text-xl">check_circle</span>
+                      <p className="text-[10px] font-bold text-[#73ffe3] uppercase truncate max-w-[200px] px-4">{attachment.name}</p>
+                    </>
+                  ) : (
+                    <>
+                      <span className="material-symbols-outlined text-[#73ffe3] text-xl">add_a_photo</span>
+                      <p className="text-[10px] font-bold text-[#adaaaa] uppercase">Upload Photo</p>
+                    </>
+                  )}
                 </div>
               </div>
 
