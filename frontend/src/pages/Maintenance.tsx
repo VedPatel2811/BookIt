@@ -20,13 +20,6 @@ interface MaintenanceStats {
   total_units: number;
 }
 
-const mockChartData = [
-  { name: 'Week 1', collection: 400000 },
-  { name: 'Week 2', collection: 700000 },
-  { name: 'Week 3', collection: 1100000 },
-  { name: 'Week 4', collection: 1480000 },
-];
-
 export const Maintenance: React.FC = () => {
   const [stats, setStats] = useState<MaintenanceStats | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);

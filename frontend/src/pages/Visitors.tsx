@@ -124,14 +124,14 @@ export const Visitors: React.FC = () => {
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
         <StatsWidget 
           label="Expected Today" 
-          value={stats?.expected_today < 10 ? `0${stats?.expected_today}` : stats?.expected_today} 
+          value={(stats?.expected_today ?? 0) < 10 ? `0${stats?.expected_today ?? 0}` : stats?.expected_today} 
           unit="Guests" 
           colorHex="#73ffe3"
           progressPercentage={stats?.expected_today ? Math.min((stats.expected_today / 20) * 100, 100) : 0}
         />
         <StatsWidget 
           label="In Premises" 
-          value={stats?.in_premises < 10 ? `0${stats?.in_premises}` : stats?.in_premises} 
+          value={(stats?.in_premises ?? 0) < 10 ? `0${stats?.in_premises ?? 0}` : stats?.in_premises} 
           unit="Active" 
           colorHex="#6e9bff"
           progressPercentage={stats?.in_premises ? Math.min((stats.in_premises / 10) * 100, 100) : 0}

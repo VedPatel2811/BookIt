@@ -46,7 +46,6 @@ export const CustomDatePicker: React.FC<CustomDatePickerProps> = ({ value, onCha
 
   const formatDisplay = () => {
     if (!value) return "Select Date";
-    const d = new Date(value);
     // JS dates can be tricky with timezone if we pass YYYY-MM-DD directly, 
     // appending T00:00:00 avoids shifting
     const dt = new Date(`${value}T00:00:00`);
