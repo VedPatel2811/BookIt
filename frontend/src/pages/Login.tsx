@@ -50,6 +50,7 @@ export function Login() {
 
   return (
     <div className="flex min-h-screen w-full relative bg-background text-on-background overflow-hidden">
+
       {/* Light Leaks */}
       <div className="light-leak top-[-10%] left-[-10%]"></div>
       <div className="light-leak bottom-[-20%] right-[10%]"></div>

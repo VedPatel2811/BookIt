@@ -35,7 +35,7 @@
   --color-tertiary-dim: #e4006c;
   --color-tertiary-fixed-dim: #ff769e;
   --color-on-tertiary-fixed-variant: #760035;
-  --color-on-surface-variant: #adaaaa;
+  --color-on-surface-variant: #ffffff;
   --color-primary-dim: #00e8c9;
   --color-on-tertiary-fixed: #380015;
   --color-error-dim: #d7383b;
@@ -62,8 +62,58 @@
 
 @layer base {
   body {
-    background-color: #0e0e0e;
-    color: #ffffff;
+    background-color: var(--color-background);
+    color: var(--color-on-background);
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root {
+      --color-background:               #f4f6f5;
+      --color-surface:                  #f4f6f5;
+      --color-surface-dim:              #e4e7e6;
+      --color-surface-bright:           #ffffff;
+      --color-surface-container-lowest: #ffffff;
+      --color-surface-container-low:    #eef1f0;
+      --color-surface-container:        #e8eceb;
+      --color-surface-container-high:   #e2e6e5;
+      --color-surface-container-highest:#dce0df;
+      --color-surface-variant:          #dbe5e1;
+      --color-surface-tint:             #006c5c;
+
+      --color-on-surface:               #191c1b;
+      --color-on-surface-variant:       #3f4946;
+      --color-on-background:            #191c1b;
+
+      --color-primary:                  #006c5c;
+      --color-on-primary:               #ffffff;
+      --color-primary-container:        #7ef8da;
+      --color-on-primary-container:     #00201a;
+      --color-primary-fixed:            #7ef8da;
+      --color-primary-fixed-dim:        #5ddbbe;
+      --color-primary-dim:              #3dbba0;
+      --color-inverse-primary:          #5ddbbe;
+
+      --color-secondary:                #0058ca;
+      --color-on-secondary:             #ffffff;
+      --color-secondary-container:      #d8e2ff;
+      --color-on-secondary-container:   #001849;
+
+      --color-tertiary:                 #b5004e;
+      --color-on-tertiary:              #ffffff;
+      --color-tertiary-container:       #ffd9e2;
+      --color-on-tertiary-container:    #3f0020;
+
+      --color-error:                    #ba1a1a;
+      --color-on-error:                 #ffffff;
+      --color-error-container:          #ffdad6;
+      --color-on-error-container:       #410002;
+
+      --color-outline:                  #6f7977;
+      --color-outline-variant:          #bec9c5;
+
+      --color-inverse-surface:          #2d3130;
+      --color-inverse-on-surface:       #eff1f0;
+    }
   }
 
   /* Custom Scrollbar */
@@ -90,45 +140,63 @@
 
 @layer utilities {
   .glass-panel {
-    background: rgba(26, 25, 25, 0.4);
+    background: color-mix(in srgb, var(--color-surface-container) 60%, transparent);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    border-top: 1px solid rgba(72, 72, 71, 0.2);
-    border-left: 1px solid rgba(72, 72, 71, 0.2);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 15%, transparent);
   }
   
   .glass-card {
-    background: rgba(14, 14, 14, 0.6);
+    background: color-mix(in srgb, var(--color-surface) 60%, transparent);
     backdrop-filter: blur(40px);
     -webkit-backdrop-filter: blur(40px);
   }
   
   .text-glow {
-    text-shadow: 0 0 12px rgba(115, 255, 227, 0.3);
+    text-shadow: 0 0 15px color-mix(in srgb, var(--color-primary) 40%, transparent);
   }
   
   .neon-glow {
-    box-shadow: 0 0 20px rgba(115, 255, 227, 0.3);
+    box-shadow: 0 0 20px color-mix(in srgb, var(--color-primary) 30%, transparent);
   }
 
   .primary-gradient {
-    background: linear-gradient(135deg, #73ffe3 0%, #00f5d4 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-container) 100%);
   }
 
   .hero-gradient {
-    background: linear-gradient(180deg, rgba(14, 14, 14, 0.2) 0%, rgba(14, 14, 14, 0.8) 70%, rgba(14, 14, 14, 1) 100%);
+    background: linear-gradient(180deg,
+      color-mix(in srgb, var(--color-background) 20%, transparent) 0%,
+      color-mix(in srgb, var(--color-background) 80%, transparent) 70%,
+      var(--color-background) 100%);
   }
 
   .light-leak {
     position: absolute;
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(115, 255, 227, 0.05) 0%, rgba(14, 14, 14, 0) 70%);
+    background: radial-gradient(circle, color-mix(in srgb, var(--color-primary) 5%, transparent) 0%, transparent 70%);
     z-index: 0;
   }
 
   .inner-light {
     box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  }
+
+  .bg-mesh {
+    background:
+      radial-gradient(circle at 0% 0%,   color-mix(in srgb, var(--color-primary)   5%, transparent) 0%, transparent 50%),
+      radial-gradient(circle at 100% 100%, color-mix(in srgb, var(--color-secondary) 5%, transparent) 0%, transparent 50%);
+  }
+
+  /* Muted body text — opacity-50 is too faint in light mode, this overrides it */
+  @media (prefers-color-scheme: light) {
+    .text-muted-adaptive {
+      opacity: 0.9;
+    }
+  }
+  .text-muted-adaptive {
+    opacity: 0.8;
   }
 }
 

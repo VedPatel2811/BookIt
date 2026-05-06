@@ -1,14 +1,34 @@
+import { Link } from 'react-router-dom';
+
 export function Header() {
   return (
-    <header className="fixed top-0 w-full z-50 flex justify-between items-center h-24 px-6 md:px-12 bg-surface/30 backdrop-blur-md border-b border-white/5">
-      <div className="text-2xl md:text-3xl font-black tracking-tighter text-primary italic font-headline drop-shadow-md">
-        BookIt
-      </div>
-      <div className="flex items-center gap-6">
-        <span className="hidden md:inline-block text-on-surface-variant font-medium text-[10px] md:text-sm font-label tracking-widest uppercase">
-          Premium Estate Management
-        </span>
-      </div>
+    <header className="fixed top-0 w-full z-50 flex justify-between items-center h-20 px-6 md:px-8 lg:px-16 bg-background/50 backdrop-blur-md border-b border-white/5">
+      <Link to="/" className="flex items-center gap-3">
+        <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-background">
+          <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 0, 'wght' 600" }}>domain</span>
+        </div>
+        <div className="text-[1.75rem] font-black tracking-tight font-headline">
+          <span className="text-on-surface">Book</span><span className="text-primary">It</span>
+        </div>
+      </Link>
+
+      <nav className="hidden md:flex items-center gap-8">
+        {['How it works', 'Features', 'Pricing'].map((item) => (
+          <a
+            key={item}
+            href={`#${item.toLowerCase().replace(/\s+/g, '-')}`}
+            className="text-xs font-label uppercase tracking-widest text-on-surface-variant opacity-80 hover:opacity-100 hover:text-primary transition-all"
+          >
+            {item}
+          </a>
+        ))}
+      </nav>
+
+      <Link to="/signup">
+        <button className="bg-primary text-background text-xs font-label font-bold uppercase tracking-widest px-5 py-2.5 rounded-xl hover:shadow-[0_0_20px_rgba(115,255,227,0.25)] active:scale-[0.98] transition-all cursor-pointer">
+          Get started
+        </button>
+      </Link>
     </header>
   );
 }
