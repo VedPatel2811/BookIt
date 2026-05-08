@@ -202,7 +202,7 @@ function ProblemSection() {
   const isSolution = stepFraction > 0.45;
 
   return (
-    <section ref={containerRef} className="relative h-[600vh] bg-background">
+    <section ref={containerRef} className="relative h-[600vh]">
       <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden px-6 md:px-8">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-secondary/5 blur-[120px] rounded-full pointer-events-none" />
         

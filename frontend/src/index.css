@@ -213,3 +213,10 @@
   direction: ltr;
 }
 
+@keyframes scan {
+  0% { transform: translateY(0); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(190px); opacity: 0; } /* 190px is roughly the height of the scanner box minus the line */
+}
+

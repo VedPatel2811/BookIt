@@ -1,6 +1,14 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 export function Header() {
+  const location = useLocation();
+  
+  const navItems = [
+    { label: 'How it works', path: '/how-it-works' },
+    { label: 'Features', path: '/features' },
+    { label: 'Pricing', path: '/pricing' },
+  ];
+
   return (
     <header className="fixed top-0 w-full z-50 flex justify-between items-center h-20 px-6 md:px-8 lg:px-16 bg-background/50 backdrop-blur-md border-b border-white/5">
       <Link to="/" className="flex items-center gap-3">
@@ -13,15 +21,35 @@ export function Header() {
       </Link>
 
       <nav className="hidden md:flex items-center gap-8">
-        {['How it works', 'Features', 'Pricing'].map((item) => (
-          <a
-            key={item}
-            href={`#${item.toLowerCase().replace(/\s+/g, '-')}`}
-            className="text-xs font-label uppercase tracking-widest text-on-surface-variant opacity-80 hover:opacity-100 hover:text-primary transition-all"
-          >
-            {item}
-          </a>
-        ))}
+        {navItems.map(({ label, path }) => {
+          const isActive = location.pathname === path;
+          
+          if (path.startsWith('/#')) {
+            return (
+              <a
+                key={label}
+                href={path}
+                className="text-xs font-label uppercase tracking-widest text-on-surface-variant opacity-80 hover:opacity-100 hover:text-primary transition-all"
+              >
+                {label}
+              </a>
+            );
+          }
+
+          return (
+            <Link
+              key={label}
+              to={path}
+              className={`text-xs font-label uppercase tracking-widest transition-all ${
+                isActive 
+                  ? 'text-primary opacity-100 font-bold' 
+                  : 'text-on-surface-variant opacity-80 hover:opacity-100 hover:text-primary'
+              }`}
+            >
+              {label}
+            </Link>
+          );
+        })}
       </nav>
 
       <Link to="/signup">

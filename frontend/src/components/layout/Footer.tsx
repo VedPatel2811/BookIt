@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export function Footer() {
   return (
     <footer className="bg-background py-12 px-6 md:px-8 lg:px-16 border-t border-white/5">
@@ -11,14 +13,18 @@ export function Footer() {
         </div>
 
         <div className="flex gap-8">
-          {['Privacy', 'Terms', 'Support'].map((link) => (
-            <a
-              key={link}
-              href="#"
+          {[
+            { label: 'Privacy', path: '/privacy' },
+            { label: 'Terms', path: '/terms' },
+            { label: 'Support', path: '/support' }
+          ].map(({ label, path }) => (
+            <Link
+              key={label}
+              to={path}
               className="text-[10px] font-label uppercase tracking-widest text-on-surface-variant opacity-60 hover:opacity-100 hover:text-primary transition-all"
             >
-              {link}
-            </a>
+              {label}
+            </Link>
           ))}
         </div>
 
