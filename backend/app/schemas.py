@@ -4,14 +4,19 @@ from datetime import datetime, date
 
 class UserBase(BaseModel):
     email: EmailStr
+    organization_name: Optional[str] = None
+    organization_address: Optional[str] = None
+    contact_number: Optional[str] = None
 
 class UserCreate(UserBase):
-    password: str
+    pass
 
 class UserResponse(UserBase):
     id: int
+    organization_id: Optional[str] = None
     is_active: bool
     created_at: Optional[datetime] = None
+    generated_password: Optional[str] = None
     
     class Config:
         from_attributes = True

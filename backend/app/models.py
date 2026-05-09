@@ -7,6 +7,10 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
+    organization_id = Column(String, unique=True, index=True, nullable=True)
+    organization_name = Column(String, nullable=True)
+    organization_address = Column(String, nullable=True)
+    contact_number = Column(String, nullable=True)
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
     is_active = Column(Boolean, default=True)

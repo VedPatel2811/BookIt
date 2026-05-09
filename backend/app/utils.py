@@ -37,3 +37,12 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode.update({"exp": expire})
 
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
+# ── Organization ID generation ─────────────────────────
+import random
+def generate_organization_id(org_name: str = "") -> str:
+    # e.g., SKYLINE-2026
+    prefix = org_name.strip().split()[0].upper()[:6] if org_name else "ORG"
+    # Ensure prefix only has alphanumeric characters
+    prefix = ''.join(e for e in prefix if e.isalnum()) or "ORG"
+    return f"{prefix}-{random.randint(1000, 9999)}"

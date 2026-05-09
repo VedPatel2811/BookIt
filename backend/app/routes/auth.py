@@ -3,6 +3,8 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from datetime import timedelta
 import os
+import secrets
+import string
 
 from app import models, schemas, utils
 from app.database import get_db
@@ -13,18 +15,31 @@ router = APIRouter()
 
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30"))
 
-@router.post("/signup", response_model=schemas.UserResponse, status_code=status.HTTP_201_CREATED)
-def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
+@router.post("/register", response_model=schemas.UserResponse, status_code=status.HTTP_201_CREATED)
+def register_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db_user = db.query(models.User).filter(models.User.email == user.email).first()
     if db_user:
         raise HTTPException(status_code=400, detail="Email already registered")
     
-    hashed_password = utils.get_password_hash(user.password)
-    new_user = models.User(email=user.email, hashed_password=hashed_password)
+    generated_password = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(12))
+    hashed_password = utils.get_password_hash(generated_password)
+    new_org_id = utils.generate_organization_id(user.organization_name)
+    
+    new_user = models.User(
+        email=user.email, 
+        hashed_password=hashed_password,
+        organization_id=new_org_id,
+        organization_name=user.organization_name,
+        organization_address=user.organization_address,
+        contact_number=user.contact_number
+    )
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
-    return new_user
+    
+    response = schemas.UserResponse.model_validate(new_user)
+    response.generated_password = generated_password
+    return response
 
 @router.post("/login", response_model=schemas.Token)
 def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):

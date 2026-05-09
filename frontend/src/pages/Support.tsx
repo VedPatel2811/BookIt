@@ -1,11 +1,13 @@
 import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
 import { useState } from 'react';
+import { sendFormSubmitEmail } from '../lib/formSubmit';
 
 export function Support() {
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
 
-  const formAction = "https://formsubmit.co/vedpatel28112004@gmail.com";
+  const adminEmail = "vedpatel28112004@gmail.com";
 
   return (
     <div className="bg-background text-on-surface font-body selection:bg-primary/30 selection:text-primary overflow-x-clip min-h-screen bg-mesh flex flex-col">
@@ -45,76 +47,92 @@ export function Support() {
               </div>
             ) : (
               <form 
-                action={formAction} 
-                method="POST" 
-                className="space-y-6 relative z-10"
-                onSubmit={() => setStatus('submitting')}
-              >
-                {/* FormSubmit Configuration */}
-                {/* Disable Captcha for smoother UX (optional) */}
-                <input type="hidden" name="_captcha" value="false" />
-                {/* Redirect back to the support page after submission or show a success message */}
-                <input type="hidden" name="_next" value={window.location.href + "?success=true"} />
-                {/* Email Subject */}
-                <input type="hidden" name="_subject" value="New Support Request from BookIt" />
-                {/* Honeypot field to prevent spam */}
-                <input type="text" name="_honey" style={{ display: 'none' }} />
+                className="space-y-6"
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  setStatus('submitting');
+                  
+                  const success = await sendFormSubmitEmail(adminEmail, {
+                    ...formData,
+                    _subject: `New Support Request: ${formData.subject}`,
+                    _template: "box"
+                  });
 
-                <div className="space-y-5">
-                  <div className="space-y-1.5">
-                    <label htmlFor="name" className="text-xs font-label uppercase tracking-widest text-on-surface-variant opacity-80">
-                      Full Name
-                    </label>
-                    <input
-                      type="text"
+                  if (success) {
+                    setStatus('success');
+                    setFormData({ name: '', email: '', subject: '', message: '' });
+                  } else {
+                    setStatus('error');
+                  }
+                }}
+              >
+                {status === 'error' && (
+                  <div className="p-4 rounded-xl bg-error/10 border border-error/20 text-error text-sm">
+                    There was an error sending your message. Please try again.
+                  </div>
+                )}
+                
+                {/* Honeypot for spam protection */}
+                <input type="text" name="_honey" style={{display: 'none'}} />
+                {/* Disable Captcha */}
+                <input type="hidden" name="_captcha" value="false" />
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label htmlFor="name" className="text-xs font-label uppercase tracking-widest text-on-surface-variant ml-1">Name</label>
+                    <input 
+                      type="text" 
                       id="name"
                       name="name"
                       required
-                      placeholder="Jane Doe"
-                      className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-on-surface-variant/30"
+                      value={formData.name}
+                      onChange={e => setFormData({...formData, name: e.target.value})}
+                      className="w-full bg-surface-container-highest border border-outline-variant/10 focus:border-primary/50 rounded-xl py-4 px-4 text-on-surface placeholder:text-white/20 transition-all outline-none" 
+                      placeholder="Your name" 
                     />
                   </div>
 
-                  <div className="space-y-1.5">
-                    <label htmlFor="email" className="text-xs font-label uppercase tracking-widest text-on-surface-variant opacity-80">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
+                  <div className="space-y-2">
+                    <label htmlFor="email" className="text-xs font-label uppercase tracking-widest text-on-surface-variant ml-1">Email</label>
+                    <input 
+                      type="email" 
                       id="email"
                       name="email"
                       required
-                      placeholder="jane@example.com"
-                      className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-on-surface-variant/30"
+                      value={formData.email}
+                      onChange={e => setFormData({...formData, email: e.target.value})}
+                      className="w-full bg-surface-container-highest border border-outline-variant/10 focus:border-primary/50 rounded-xl py-4 px-4 text-on-surface placeholder:text-white/20 transition-all outline-none" 
+                      placeholder="you@example.com" 
                     />
                   </div>
+                </div>
 
-                  <div className="space-y-1.5">
-                    <label htmlFor="society" className="text-xs font-label uppercase tracking-widest text-on-surface-variant opacity-80">
-                      Society Name (Optional)
-                    </label>
-                    <input
-                      type="text"
-                      id="society"
-                      name="society"
-                      placeholder="e.g. Green Valley Apartments"
-                      className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-on-surface-variant/30"
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <label htmlFor="subject" className="text-xs font-label uppercase tracking-widest text-on-surface-variant ml-1">Subject</label>
+                  <input 
+                    type="text" 
+                    id="subject"
+                    name="subject"
+                    required
+                    value={formData.subject}
+                    onChange={e => setFormData({...formData, subject: e.target.value})}
+                    className="w-full bg-surface-container-highest border border-outline-variant/10 focus:border-primary/50 rounded-xl py-4 px-4 text-on-surface placeholder:text-white/20 transition-all outline-none" 
+                    placeholder="How can we help?" 
+                  />
+                </div>
 
-                  <div className="space-y-1.5">
-                    <label htmlFor="message" className="text-xs font-label uppercase tracking-widest text-on-surface-variant opacity-80">
-                      How can we help?
-                    </label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      required
-                      rows={5}
-                      placeholder="Describe your issue or question..."
-                      className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-on-surface-variant/30 resize-y"
-                    ></textarea>
-                  </div>
+                <div className="space-y-2">
+                  <label htmlFor="message" className="text-xs font-label uppercase tracking-widest text-on-surface-variant ml-1">Message</label>
+                  <textarea 
+                    id="message"
+                    name="message"
+                    required
+                    rows={5}
+                    value={formData.message}
+                    onChange={e => setFormData({...formData, message: e.target.value})}
+                    className="w-full bg-surface-container-highest border border-outline-variant/10 focus:border-primary/50 rounded-xl py-4 px-4 text-on-surface placeholder:text-white/20 transition-all outline-none resize-none" 
+                    placeholder="Tell us more about your issue..." 
+                  ></textarea>
                 </div>
 
                 <button
